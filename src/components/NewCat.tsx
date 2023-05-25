@@ -69,7 +69,7 @@ const NewCat = () => {
       message.error('Image must smaller than 2MB!');
     }
     return isJpgOrPng && isLt2M;
-    };
+};
 
   const uploadButton = (
     <div>
