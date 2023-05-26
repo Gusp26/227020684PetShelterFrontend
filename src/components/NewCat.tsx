@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import type { DatePickerProps } from 'antd';
-import { message, DatePicker, Upload, Select, Form, Input, Button } from 'antd';
-import { UploadOutlined, LoadingOutlined, PlusOutlined } from '@ant-design/icons';
+import { DatePicker, Select, Form, Input, Button, Upload, message } from 'antd';
 import { Buffer } from 'buffer';
 import axios from "axios";
 import { api } from './common/http-common';
+
+import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
 import type { UploadChangeParam } from 'antd/es/upload';
 import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
 
@@ -12,12 +13,56 @@ import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
 const { TextArea } = Input
 const { Option } = Select
 
+const getBase64 = (img: RcFile, callback: (url: string) => void) => {
+  const reader = new FileReader();
+  reader.addEventListener('load', () => callback(reader.result as string));
+  reader.readAsDataURL(img);
+};
+
+const beforeUpload = (file: RcFile) => {
+  const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
+  if (!isJpgOrPng) {
+    message.error('You can only upload JPG/PNG file!');
+  }
+  const isLt2M = file.size / 1024 / 1024 < 2;
+  if (!isLt2M) {
+    message.error('Image must smaller than 2MB!');
+  }
+  return isJpgOrPng && isLt2M;
+};
+
 const NewCat = () => {
   const username = "alice";
   const password = "abc123";
   // Create token by username:password
   const access_token = Buffer.from(`${username}:${password}`, 'utf8').toString('base64');
   localStorage.setItem('atoken', access_token);
+
+  const [loading, setLoading] = useState(false);
+  const [imageUrl, setImageUrl] = useState<string>();
+
+  const handleChange: UploadProps['onChange'] = (info: UploadChangeParam<UploadFile>) => {
+    if (info.file.status === 'uploading') {
+      setLoading(true);
+      return;
+    }
+    if (info.file.status === 'done') {
+      // Get this url from response in real world.
+      getBase64(info.file.originFileObj as RcFile, (url) => {
+        setLoading(false);
+        setImageUrl(url);
+      });
+    }
+  };
+
+  const uploadButton = (
+    <div>
+      {loading ? <LoadingOutlined /> : <PlusOutlined />}
+      <div style={{ marginTop: 8 }}>Upload</div>
+    </div>
+  );
+
+  console.log(imageUrl);
   
   const handleFormSubmit = (values: any) => {
     const name = values.name;
@@ -25,17 +70,17 @@ const NewCat = () => {
     const gender = values.gender;
     const birth = values.birth;
     const centre = values.centre;
-    const umageurl = values.umageurl;
+    const imageurl = {imageUrl};
     const remark = values.remark;
     const status = values.status;
-    console.log(values, name, breeds, gender, birth, centre, umageurl, remark, status);
+    console.log(values, name, breeds, gender, birth, centre, imageurl, remark, status);
     const postCat = {
       name: name,
       breeds: breeds,
       gender: gender,
       birth: birth,
       centre: centre,
-      umageurl: umageurl,
+      imageurl: imageurl,
       remark: remark,
       status: status
     }
@@ -59,24 +104,6 @@ const NewCat = () => {
     console.log(date, dateString);
   };
 
-  const beforeUpload = (file: RcFile) => {
-  const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
-    if (!isJpgOrPng) {
-      message.error('You can only upload JPG/PNG file!');
-    }
-    const isLt2M = file.size / 1024 / 1024 < 2;
-    if (!isLt2M) {
-      message.error('Image must smaller than 2MB!');
-    }
-    return isJpgOrPng && isLt2M;
-};
-
-  const uploadButton = (
-    <div>
-      {loading ? <LoadingOutlined /> : <PlusOutlined />}
-      <div style={{ marginTop: 8 }}>Upload</div>
-    </div>
-  );
   
   return (
     <Form name="cat"  labelCol={{ span: 2 }} onFinish={(values)=>handleFormSubmit(values)}>
@@ -90,36 +117,51 @@ const NewCat = () => {
       </Form.Item>
       <Form.Item name="gender" label="Gender" rules={contentRules}>
         <Select
-          placeholder="Select a option and change input text above"
+          placeholder="Select Gender"
           allowClear
         >
           <Option value="M">M - Male</Option>
           <Option value="F">F - Female</Option>
         </Select>
       </Form.Item>
-      <Form.Item name="birth" label="birth">
+      <Form.Item name="birth" label="Birth">
         <DatePicker onChange={onChange} />
       </Form.Item>
-      <Form.Item name="centre" label="centre" rules={contentRules}>
-        <Input />
+      <Form.Item name="centre" label="Centre" rules={contentRules}>
+        <Select
+          placeholder="Select a centre"
+          allowClear
+        >
+          <Option value="HK01">HK01 - Hong Kong Centre</Option>
+          <Option value="HK02">HK02 - Wan Chai Centre</Option>
+          <Option value="KL01">KL01 - Kowloon Centre</Option>
+          <Option value="KL02">KL02 - Kowloon Bay Centre</Option>
+          <Option value="KL03">KL03 - Kowloon Tong Centre</Option>
+        </Select>
       </Form.Item>
-      <Form.Item name="umageurl" label="Cat Photo">
+      <Form.Item name="imageurl" label="Cat Photo">
         <Upload
-        name="avatar"
+        name="imageurl"
         listType="picture-card"
-        className="avatar-uploader"
-        showUploadList={true}
+        showUploadList={false}
+        action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
         beforeUpload={beforeUpload}
         onChange={handleChange}
       >
         {imageUrl ? <img src={imageUrl} alt="imageurl" style={{ width: '100%' }} /> : uploadButton}
       </Upload>
       </Form.Item>
-      <Form.Item name="remark" label="remark" rules={contentRules}>
+      <Form.Item name="remark" label="Remark" >
         <TextArea rows={4} />
       </Form.Item>
-      <Form.Item name="status" label="status">
-        <Input />
+      <Form.Item name="status" label="Status" rules={contentRules}>
+        <Select
+          placeholder="Select Status"
+          allowClear
+        >
+          <Option value="Available">Available</Option>
+          <Option value="Not available">Not available</Option>
+        </Select>
       </Form.Item>
       <Form.Item>
         <Button type="primary" htmlType="submit">Add New Cat</Button>
