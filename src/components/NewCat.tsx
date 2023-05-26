@@ -61,8 +61,6 @@ const NewCat = () => {
       <div style={{ marginTop: 8 }}>Upload</div>
     </div>
   );
-
-  console.log(imageUrl);
   
   const handleFormSubmit = (values: any) => {
     const name = values.name;
@@ -70,9 +68,10 @@ const NewCat = () => {
     const gender = values.gender;
     const birth = values.birth;
     const centre = values.centre;
-    const imageurl = {imageUrl};
+    const imageurl = Object.values({imageUrl}).toString('base64');
     const remark = values.remark;
     const status = values.status;
+    console.log(imageurl);
     console.log(values, name, breeds, gender, birth, centre, imageurl, remark, status);
     const postCat = {
       name: name,
@@ -141,14 +140,13 @@ const NewCat = () => {
       </Form.Item>
       <Form.Item name="imageurl" label="Cat Photo">
         <Upload
-        name="imageurl"
         listType="picture-card"
         showUploadList={false}
         action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
         beforeUpload={beforeUpload}
         onChange={handleChange}
       >
-        {imageUrl ? <img src={imageUrl} alt="imageurl" style={{ width: '100%' }} /> : uploadButton}
+        {imageUrl ? <img src={imageUrl} style={{ width: '100%' }} /> : uploadButton}
       </Upload>
       </Form.Item>
       <Form.Item name="remark" label="Remark" >
