@@ -137,7 +137,7 @@ const NewCat = () => {
           <Option value="F">F - Female</Option>
         </Select>
       </Form.Item>
-      <Form.Item name="birth" label="Birth">
+      <Form.Item name="birth" label="Birth" rules={contentRules}>
         <DatePicker onChange={onChange} />
       </Form.Item>
       <Form.Item name="centre" label="Centre" rules={contentRules}>

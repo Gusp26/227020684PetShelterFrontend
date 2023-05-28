@@ -9,6 +9,10 @@ import UpdateCat from './components/UpdateCat';
 import Cat2 from './components/Cats2';
 import DeleteCat from './components/DeleteCat';
 import Filter from './components/FilterCat';
+import Register from './components/Register';
+import Login from './components/Login';
+
+
 
 const { Header, Content, Footer } = Layout;
 
@@ -21,9 +25,11 @@ export default function App() {
             <Link to="/">Home</Link>
             <Link to="/dashboard">Dashboard</Link>
             <Link to="/about">About</Link>
-            <Link to="/NewCat">NewCat</Link>
-            <Link to="/Cat2">Update Cat information</Link>
-            <Link to="/Filter">Cat Filter</Link>
+            <Link to="/NewCat">New Cat</Link>
+            <Link to="/Cat2">Cat information</Link>
+            <Link to="/Filter">Filter</Link>
+            <Link to="/Login">Login</Link>
+            <Link to="/Register">Register</Link>
           </Space>
         </nav>
       </Header>
@@ -38,6 +44,8 @@ export default function App() {
           <Route path="/b/:bid" element = {<UpdateCat /> } />
           <Route path="/c/:cid" element = {<DeleteCat /> } />
           <Route path="/Filter" element = {<Filter /> } />
+          <Route path="/Login" element = {<Login /> } />
+          <Route path="/Register" element = {<Register /> } />
         </Routes>
       </Content>
       <Footer>

@@ -11,6 +11,8 @@ import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
 
 import { useParams } from 'react-router-dom';
 
+import dayjs from 'dayjs';
+
 const { TextArea } = Input
 const { Option } = Select
 
@@ -70,7 +72,7 @@ const NewCat = () => {
 
     console.log(imageUrl);
   };
-
+  
   const uploadButton = (
     <div>
       {loading ? <LoadingOutlined /> : <PlusOutlined />}
@@ -101,7 +103,7 @@ const NewCat = () => {
     }
     
     // Post request
-    axios.put(`${api.uri}/cats`, postCat, {
+    axios.put(`${api.uri}/cats/${bid}`, postCat, {
       headers: {
         'Authorization': `Basic ${localStorage.getItem('atoken')}`
       }
@@ -127,11 +129,12 @@ const NewCat = () => {
       }
   return e && e.fileList;
   };
-
-
+  
   if(!cats){
     return(<div>Please wait ...</div>)
   } else {
+    
+    const dateFormat = 'YYYY-MM-DD';
     
 return (
     <Form 
@@ -165,7 +168,7 @@ return (
         </Select>
       </Form.Item>
       <Form.Item name="birth" label="Birth">
-        <DatePicker onChange={onChange} />
+        <DatePicker defaultValue={dayjs(`${cats.birth}`, dateFormat)}  name="birth" onChange={onChange} />
       </Form.Item>
       <Form.Item name="centre" label="Centre" >
         <Select
@@ -180,7 +183,7 @@ return (
         </Select>
       </Form.Item>
       <Form.Item name="imageurl" label="Cat Photo" valuePropName="fileList" getValueFromEvent={normFile}>
-        <Upload
+        <Upload 
         listType="picture-card"
         showUploadList={false}
         action="https://run.mocky.io/v3/4f503449-0349-467e-a38a-c804956712b7"
