@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import type { DatePickerProps } from 'antd';
-import { DatePicker, Select, Form, Input, Button, Upload, message } from 'antd';
+import { DatePicker, Select, Form, Input, Button, Upload, Space, message } from 'antd';
 import { Buffer } from 'buffer';
 import axios from "axios";
 import { api } from './common/http-common';
@@ -8,7 +8,6 @@ import { api } from './common/http-common';
 import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
 import type { UploadChangeParam } from 'antd/es/upload';
 import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
-
 
 const { TextArea } = Input
 const { Option } = Select
@@ -42,6 +41,7 @@ const NewCat = () => {
   const [imageUrl, setImageUrl] = useState<string>();
 
   const handleChange: UploadProps['onChange'] = (info: UploadChangeParam<UploadFile>) => {
+    
     if (info.file.status === 'uploading') {
       setLoading(true);
       return;
@@ -53,6 +53,8 @@ const NewCat = () => {
         setImageUrl(url);
       });
     }
+
+    console.log(imageUrl);
   };
 
   const uploadButton = (
@@ -92,7 +94,8 @@ const NewCat = () => {
     }).then((res)=> {
       console.log(res.data);
     });
-    
+
+    message.success('Add cat successful')
   }
 
   const contentRules = [
@@ -103,7 +106,18 @@ const NewCat = () => {
     console.log(date, dateString);
   };
 
-  
+  const onReset = () => {
+    window.location.reload();
+  };
+
+  const normFile = (e: any) => {
+    console.log('Upload event:', e);
+      if (Array.isArray(e)) {
+        return e;
+      }
+  return e && e.fileList;
+  };
+    
   return (
     <Form name="cat"  labelCol={{ span: 2 }} onFinish={(values)=>handleFormSubmit(values)}>
       <br/>
@@ -138,11 +152,11 @@ const NewCat = () => {
           <Option value="KL03">KL03 - Kowloon Tong Centre</Option>
         </Select>
       </Form.Item>
-      <Form.Item name="imageurl" label="Cat Photo">
+      <Form.Item name="imageurl" label="Cat Photo" valuePropName="fileList" getValueFromEvent={normFile}>
         <Upload
         listType="picture-card"
         showUploadList={false}
-        action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+        action="https://run.mocky.io/v3/4f503449-0349-467e-a38a-c804956712b7"
         beforeUpload={beforeUpload}
         onChange={handleChange}
       >
@@ -162,7 +176,10 @@ const NewCat = () => {
         </Select>
       </Form.Item>
       <Form.Item>
-        <Button type="primary" htmlType="submit">Add New Cat</Button>
+        <Space wrap>
+          <Button type="primary" htmlType="submit" > Add </Button>
+          <Button type="primary" htmlType="reset" onClick={onReset} danger> Reset </Button>
+        </Space>
       </Form.Item>
     
     </Form>

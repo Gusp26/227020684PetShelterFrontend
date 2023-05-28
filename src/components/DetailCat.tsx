@@ -36,7 +36,7 @@ const DetailCat = () => {
         <Row justify="center">
           {
               <Col key={cats.id}>
-                <Card title={name} style={{width: 700} }>
+                <Card title={cats.name} style={{width: 700} }>
                   <pre>       ID:         {cats.id}</pre>
                   <pre>       Breed:      {cats.breeds}</pre>
                   <pre>       Gender:     {cats.gender}</pre>
@@ -60,6 +60,7 @@ const DetailCat = () => {
               <Col key={cats.id}>
                 <Card title={name} style={{width: 700} }>
                   <pre>       ID:         {cats.id}</pre>
+                  <pre>       Name:       {cats.name}</pre>
                   <pre>       Breed:      {cats.breeds}</pre>
                   <pre>       Gender:     {cats.gender}</pre>
                   <pre>       Birth:      {cats.birth} </pre>

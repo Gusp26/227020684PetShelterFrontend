@@ -30,12 +30,13 @@ const Cat = () => {
       return(
         <Row>
           {
-            cats && cats.map(({id, name, breeds, gender, imageurl})=> (
+            cats && cats.map(({id, name, breeds, gender, centre, imageurl})=> (
               <Col span={8} key={id}>
                 <Card title={name} style={{width: 400}}>
                   <pre>ID:         {id}</pre>
                   <pre>Breed:      {breeds}</pre>
                   <pre>Gender:     {gender}</pre>
+                  <pre>Centre:     {centre}</pre>
                   <Image width={300} height={300} src={imageurl} />
                   <p></p>
                   <Link to={`/a/${id}`}>Details</Link>
