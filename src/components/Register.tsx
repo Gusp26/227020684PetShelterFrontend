@@ -5,6 +5,7 @@ import { api } from './common/http-common';
 import { useNavigate } from 'react-router-dom';
 
 const Register = () => {
+  const [form] = Form.useForm();
   const navigate= useNavigate();
 
   const handleFormSubmit = (values: any) => {
@@ -29,8 +30,8 @@ const Register = () => {
         console.log(res.data);
       });
 
-      message.success('Register successful')
-    }else if (staff == 'F'){
+      message.success('Register successful');
+    } else if (staff == 'F'){
       const postUser = {
         username: username,
         password: password,
@@ -40,15 +41,13 @@ const Register = () => {
       // Post request
       axios.post(`${api.uri}/user`, postUser)
         . then((res)=> {
-          if(res.data.Status === "Success"){
-            navigate('/')
-          } else {
-            message.error('Username or Email existing, please check again')
-          }
+          
+        message.success('Register successful');
         console.log(res.data);
       });
+      
     } else if (staff == 'T' && sign_up_code != '970226'){
-        message.success('Register successful')
+        message.error('Incorrect sign up code !');
     } else {
       
     }
@@ -61,8 +60,9 @@ const Register = () => {
 
     
   return (
-    <Form name="user" labelCol={{ span: 8 }} wrapperCol={{ span: 16 }} 
-      style={{ maxWidth: 600 }} initialValues={{ staff: 'F'}}
+    <Form 
+      name="user" labelCol={{ span: 8 }} wrapperCol={{ span: 16 }} 
+      initialValues={{ staff: 'F'}}
       onFinish={(values)=>handleFormSubmit(values)}
       >
       <br/><br/><br/>
@@ -72,7 +72,7 @@ const Register = () => {
               { max: 16 , message: 'Maximum 16 characters.' },
              ]}
       >
-      <Input />
+      <Input style={{width: 400}}/>
     </Form.Item>
 
       <Form.Item label="Password" name="password"
@@ -81,7 +81,7 @@ const Register = () => {
               { max: 32 , message: 'Maximum 32 characters.' },
              ]}
       >
-      <Input.Password />
+      <Input.Password style={{width: 400}}/>
       </Form.Item>
 
       <Form.Item label="Email" name="email"
@@ -89,26 +89,45 @@ const Register = () => {
              { max: 64 , message: 'Maximum 64 characters.' },
              ]}
       >
-      <Input />
+      <Input style={{width: 400}}/>
       </Form.Item>
 
       <Form.Item label="Staff" name="staff">
         <Select
           placeholder="Select ..."
-        >
-          <Option value="F">No</Option>
-          <Option value="T">Yes</Option>
-        </Select>
+          style={{width: 400}}
+          options={[
+            {
+              value: 'F',
+              label: 'No',
+            },
+            {
+              value: 'T',
+              label: 'Yes',
+            }
+          ]}
+        />
       </Form.Item>
       
-      <Form.Item label="Sign up code" name="sign_up_code">
-      <Input />
+      <Form.Item label="Staff sign up code" name="sign_up_code">
+      <Input style={{width: 400}}/>
       </Form.Item>
 
       <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-      <Button type="primary" htmlType="submit">
-        Submit
-      </Button>
+        <Space wrap>
+          <Button type="primary" htmlType="submit" style={{width: 195}} >
+          Submit
+          </Button>
+          <Button type="primary" onClick = {onReset} style={{width: 195}} danger>
+          Reset
+          </Button>
+        </Space>
+      </Form.Item>
+      <hr/>
+      <Form.Item wrapperCol={{ offset: 8, span: 16 } }>
+          <Button type="primary" onClick={()=>navigate(-1)} style={{width: 400}}>
+            Back
+          </Button>
       </Form.Item>
     </Form>
   )

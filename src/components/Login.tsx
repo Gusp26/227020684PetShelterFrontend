@@ -3,27 +3,32 @@ import { Form, Input, Button, Space, message } from 'antd';
 import axios from "axios";
 import { api } from './common/http-common';
 import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 const Login = () => {
+  const [form] = Form.useForm();
   const navigate= useNavigate();
 
+  const [user, setUser] = React.useState(null);
+  
   const handleFormSubmit = (values: any) => {
     const username = values.username;
     const password = values.password;
     console.log(values, username, password);
 
-      const postUser = {
-        username: username,
-        password: password
-      }
+      
+    const postUser = {
+      username: username,
+      password: password
+    }
       // Post request
-      axios.post(`${api.uri}/login`, postUser)
-        . then((res)=> {
-        console.log(res.data);
-      });
+    axios.post(`${api.uri}/login`, postUser)
+      .then((res)=> {
+      setUser(res.data);
+      console.log(res.data);
+      })
 
-      message.success('Login  successful')
-    
+    console.log(user);
   }
 
   const onReset = () => {
@@ -33,7 +38,6 @@ const Login = () => {
     
   return (
     <Form name="user" labelCol={{ span: 8 }} wrapperCol={{ span: 16 }} 
-      style={{ maxWidth: 600 }} 
       onFinish={(values)=>handleFormSubmit(values)}
       >
       <br/><br/><br/>
@@ -43,7 +47,7 @@ const Login = () => {
               { max: 16 , message: 'Maximum 16 characters.' },
              ]}
       >
-      <Input />
+      <Input style={{width: 400}} />
     </Form.Item>
 
       <Form.Item label="Password" name="password"
@@ -52,13 +56,24 @@ const Login = () => {
               { max: 32 , message: 'Maximum 32 characters.' },
              ]}
       >
-      <Input.Password />
+      <Input.Password style={{width: 400}} />
       </Form.Item>
 
-      <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-      <Button type="primary" htmlType="submit">
-        Submit
-      </Button>
+      <Form.Item wrapperCol={{ offset: 8, span: 16 } }>
+        <Space wrap>
+          <Button type="primary" htmlType="submit" style={{width: 195}} >
+          Submit
+          </Button>
+          <Button type="primary" onClick = {onReset} style={{width: 195}} danger>
+          Reset
+          </Button>
+        </Space>
+      </Form.Item>
+        <hr/>
+      <Form.Item wrapperCol={{ offset: 8, span: 16 } }>
+          <Button type="primary" style={{width: 400}} >
+           <Link to={`/Register`}>Register</Link>
+          </Button>
       </Form.Item>
     </Form>
   )

@@ -46,12 +46,6 @@ const NewCat = () => {
   }, []);
 
   console.log(cats);
-  
-  const username = "alice";
-  const password = "abc123";
-  // Create token by username:password
-  const access_token = Buffer.from(`${username}:${password}`, 'utf8').toString('base64');
-  localStorage.setItem('atoken', access_token);
 
   const [loading, setLoading] = useState(false);
   const [imageUrl, setImageUrl] = useState<string>();
@@ -186,7 +180,7 @@ return (
         <Upload 
         listType="picture-card"
         showUploadList={false}
-        action="https://run.mocky.io/v3/4f503449-0349-467e-a38a-c804956712b7"
+        action="https://jsonplaceholder.typicode.com/posts"
         beforeUpload={beforeUpload}
         onChange={handleChange}
       >

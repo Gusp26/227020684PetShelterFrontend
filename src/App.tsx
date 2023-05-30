@@ -11,8 +11,7 @@ import DeleteCat from './components/DeleteCat';
 import Filter from './components/FilterCat';
 import Register from './components/Register';
 import Login from './components/Login';
-
-
+import Logout from './components/Logout';
 
 const { Header, Content, Footer } = Layout;
 
@@ -23,13 +22,11 @@ export default function App() {
         <nav>
           <Space>
             <Link to="/">Home</Link>
+            <Link to="/Filter">Filter</Link>
             <Link to="/dashboard">Dashboard</Link>
             <Link to="/about">About</Link>
-            <Link to="/NewCat">New Cat</Link>
-            <Link to="/Cat2">Cat information</Link>
-            <Link to="/Filter">Filter</Link>
             <Link to="/Login">Login</Link>
-            <Link to="/Register">Register</Link>
+            <Link to="/Logout">Logout</Link>
           </Space>
         </nav>
       </Header>
@@ -46,6 +43,7 @@ export default function App() {
           <Route path="/Filter" element = {<Filter /> } />
           <Route path="/Login" element = {<Login /> } />
           <Route path="/Register" element = {<Register /> } />
+          <Route path="/Logout" element = {<Logout /> } />
         </Routes>
       </Content>
       <Footer>
