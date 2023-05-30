@@ -12,6 +12,7 @@ import Filter from './components/FilterCat';
 import Register from './components/Register';
 import Login from './components/Login';
 import Public from './components/Public';
+import Catapi1 from './components/Catapi1';
 
 const { Header, Content, Footer } = Layout;
 
@@ -23,8 +24,7 @@ export default function App() {
           <Space>
             <Link to="/Home">Home</Link>
             <Link to="/Filter">Filter</Link>
-            <Link to="/dashboard">Dashboard</Link>
-            <Link to="/about">About</Link>
+            <Link to="/Catapi1">Breeds Api</Link>
           </Space>
         </nav>
       </Header>
@@ -43,6 +43,7 @@ export default function App() {
           <Route path="/Login" element = {<Login /> } />
           <Route path="/Register" element = {<Register /> } />
           <Route path="/Public" element = {<Public /> } />
+          <Route path="/Catapi1" element = {<Catapi1 /> } />
         </Routes>
       </Content>
       <Footer>

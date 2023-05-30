@@ -31,11 +31,6 @@ const beforeUpload = (file: RcFile) => {
 };
 
 const NewCat = () => {
-  const username = "staff123";
-  const password = "123456";
-  // Create token by username:password
-  const access_token = Buffer.from(`${username}:${password}`, 'utf8').toString('base64');
-  localStorage.setItem('atoken', access_token);
 
   const [loading, setLoading] = useState(false);
   const [imageUrl, setImageUrl] = useState<string>();
