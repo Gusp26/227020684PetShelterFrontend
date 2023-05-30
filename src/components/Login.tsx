@@ -17,12 +17,13 @@ const Login = () => {
     const password = values.password;
     console.log(values, username, password);
 
+    const access_token = Buffer.from(`${username}:${password}`, 'utf8').toString('base64');
+    localStorage.setItem('atoken', access_token);
       
     const postUser = {
       username: username,
       password: password
     }
-
       // Post request
     axios.post(`${api.uri}/login`, postUser)
       .then((res)=> {
@@ -30,10 +31,12 @@ const Login = () => {
       console.log(res.data);
       })
 
-    const access_token = Buffer.from(`${user.username}:${user.password}`, 'utf8').toString('base64');
-    localStorage.setItem('atoken', access_token);
-    localStorage.setItem('user', JSON.stringify(user));
-    navigate('/Home', { replace: true });
+    if(!user){
+      
+    } else {
+      localStorage.setItem('user', JSON.stringify(user));
+      navigate('/Home', { replace: true });
+    }
     
   }
 

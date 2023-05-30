@@ -17,15 +17,7 @@ const Filter = () => {
     const centre = values.centre;
     console.log(values, id, name, breeds, gender, centre);
 
-    if(!id){
-      axios.get(`${api.uri}/cats`)
-      .then((res)=> {
-        setCats(res.data);
-        console.log(res.data);
-      });
-      
-    } else {
-      const postCat = {
+    const postCat = {
       id: id,
       name: name,
       breeds: breeds,
@@ -38,8 +30,7 @@ const Filter = () => {
         setCats(res.data);
         console.log(res.data);
     });
-    }
-    
+
   }
 
   console.log(cats);

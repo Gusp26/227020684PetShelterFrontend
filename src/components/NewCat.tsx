@@ -80,11 +80,11 @@ const NewCat = () => {
       remark: remark,
       status: status
     }
-    
+
     // Post request
     axios.post(`${api.uri}/cats`, postCat, {
       headers: {
-        'Authorization': `Basic ${localStorage.getItem('atoken')}`
+        'Authorization': `Basic ${localStorage.getItem('atoken')}`,
       }
     }).then((res)=> {
       console.log(res.data);

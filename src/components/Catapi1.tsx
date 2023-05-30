@@ -44,7 +44,7 @@ const Catapi1 = () => {
     <>
       <Select
       defaultValue="abob"
-      style={{ width: 400 }}
+      style={{ width: 600 }}
       onChange={requestCats}
       options={[
 {  value: 'abob', label: 'Abyssinian',  },
