@@ -55,7 +55,7 @@ const Register = () => {
   }
 
   const onReset = () => {
-    form.resetFields();
+    window.location.reload();
   };
 
     

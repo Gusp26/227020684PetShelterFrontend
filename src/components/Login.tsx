@@ -5,10 +5,11 @@ import { api } from './common/http-common';
 import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 
-const Login = () => {
-  const [form] = Form.useForm();
-  const navigate= useNavigate();
+import { Buffer } from 'buffer';
 
+const Login = () => {
+  const navigate= useNavigate();
+    
   const [user, setUser] = React.useState(null);
   
   const handleFormSubmit = (values: any) => {
@@ -21,6 +22,7 @@ const Login = () => {
       username: username,
       password: password
     }
+
       // Post request
     axios.post(`${api.uri}/login`, postUser)
       .then((res)=> {
@@ -28,16 +30,19 @@ const Login = () => {
       console.log(res.data);
       })
 
-    console.log(user);
+    const access_token = Buffer.from(`${user.username}:${user.password}`, 'utf8').toString('base64');
+    localStorage.setItem('atoken', access_token);
+    localStorage.setItem('user', JSON.stringify(user));
+    navigate('/Home', { replace: true });
+    
   }
 
   const onReset = () => {
-    form.resetFields();
+    window.location.reload();
   };
-
     
   return (
-    <Form name="user" labelCol={{ span: 8 }} wrapperCol={{ span: 16 }} 
+    <Form labelCol={{ span: 8 }} wrapperCol={{ span: 16 }} 
       onFinish={(values)=>handleFormSubmit(values)}
       >
       <br/><br/><br/>
@@ -73,6 +78,11 @@ const Login = () => {
       <Form.Item wrapperCol={{ offset: 8, span: 16 } }>
           <Button type="primary" style={{width: 400}} >
            <Link to={`/Register`}>Register</Link>
+          </Button>
+      </Form.Item>
+      <Form.Item wrapperCol={{ offset: 8, span: 16 } }>
+          <Button type="primary" style={{width: 400}} >
+           <Link to={`/Public`}>Public User</Link>
           </Button>
       </Form.Item>
     </Form>
